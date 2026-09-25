@@ -49,7 +49,7 @@ const mensajes = {
   pagoRealizadoMessage: "¿Cómo estás? Hablas con Yeison Hernandez del equipo de soporte de Lizto. Mil gracias por el pago. Ya puedes ingresar.",
   pagoGraciasMessage: "con mucho gusto, indícame el NIT del salón para solicitarlo al área contable.",
   solicitarLinkMessage: "¿Cómo estás? Hablas con Yeison Hernandez del equipo de soporte de Lizto. Mil disculpas, el sistema entró en suspensión automática al no detectar el pago. ¿Me puedes enviar el soporte de pago y el NIT para verificarlo con contabilidad?",
-  despedidaMessage: "ha sido un gusto ayudarte. Si necesitas más ayuda, no dudes en contactarnos. ¡Te deseo un excelente día!",
+  despedidaMessage: "ha sido un gusto ayudarte. Si necesitas más ayuda, no dudes en contactarnos. ¡Te deseo un excelente día! Te dejamos una encuesta de satisfacción para que puedas calificar nuestra atención: short.lizto.co/pkFN2dEfvu",
   linkReunionMessage: "Al correo te acabamos de enviar el link de la reunión. ¿Me confirmas por favor si te llegó?",
   sinRespuesta: "Esperamos que la solución brindada haya resuelto tu caso. Cuando tengas un momento, ¿podrías confirmarnos si todo está en orden? Al no tener respuesta, procederemos a cerrar el ticket, pero si tienes otra consulta estaremos atentos para ayudarte.",
   linkPago: "puedes realizar el pago en este link:",
