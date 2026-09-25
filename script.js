@@ -129,7 +129,7 @@ function actualizarMensajeActual() {
    ========================================================= */
 const horarios = {
   yeison: { '9am': 'https://us06web.zoom.us/j/86553506923', '11am': 'https://us06web.zoom.us/j/84015173788', '3pm': 'https://us06web.zoom.us/j/86502199583', '5pm': 'https://us06web.zoom.us/j/89901352812' },
-  paola: { '9am': 'https://us06web.zoom.us/j/84560427915', '12pm': 'https://us06web.zoom.us/j/87186962523', '4pm': 'https://us06web.zoom.us/j/81938853734' }
+  paola: { '9am': 'https://us06web.zoom.us/j/84560427915', '1pm': 'https://us06web.zoom.us/j/87186962523', '4pm': 'https://us06web.zoom.us/j/81938853734' }
 };
 
 let agenteSeleccionado = '';
