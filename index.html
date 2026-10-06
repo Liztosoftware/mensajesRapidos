@@ -7,7 +7,8 @@
 <link rel="icon" type="image/png" href="https://i.ibb.co/M5QnCZR1/images.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<!-- Si cambias styles.css o script.js, sube este número (v=3, v=4…) para que el navegador no use la versión vieja -->
+<link rel="stylesheet" href="styles.css?v=2">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
@@ -57,6 +58,12 @@
     <li><button class="nav-btn" data-section="dividir" onclick="mostrarSeccion('dividir')">
       <span class="nav-icon">📊</span>
       <span class="nav-text">Dividir Archivos</span>
+    </button></li>
+
+    <li><button class="nav-btn" onclick="abrirEnlace('https://claude.ai/artifact/BDEoKpv9NzzWbAnUmuDh5C')">
+      <span class="nav-icon">🚀</span>
+      <span class="nav-text">Sprint Soporte</span>
+      <svg class="ext" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
     </button></li>
 
     <!-- Ítem con submenú -->
@@ -248,6 +255,6 @@
 
 </main>
 
-<script src="script.js"></script>
+<script src="script.js?v=2"></script>
 </body>
 </html>
