@@ -15,50 +15,89 @@
 
 <div id="copy-notification">Copiado ✅</div>
 
-<!-- ============ MENÚ PRINCIPAL ============ -->
-<nav class="navbar">
-  <div class="nav-inner">
-    <div class="nav-brand">
+<!-- ============ BARRA SUPERIOR (solo celular) ============ -->
+<header class="mobile-topbar">
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="brand-title">Herramientas Lizto</span>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ============ MENÚ LATERAL ============ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
       <span class="brand-mark">L</span>
       <div class="brand-text">
         <span class="brand-title">Herramientas</span>
         <span class="brand-subtitle">Líder de Soporte · Lizto Software</span>
       </div>
     </div>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Cerrar menú">✕</button>
+  </div>
 
-    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
+  <nav class="sidebar-nav">
+    <!--
+      CÓMO AGREGAR UNA HERRAMIENTA NUEVA:
+      - Interna (vive en esta página): copia un <li> con onclick="mostrarSeccion('NOMBRE')" y data-section="NOMBRE",
+        y crea abajo el bloque <section class="tool-section" id="seccion-NOMBRE">.
+      - Externa (otro enlace): copia un <li> con onclick="abrirEnlace('URL')" y la clase nav-external.
+      CÓMO AGREGAR UNA CATEGORÍA NUEVA:
+      - Copia un bloque <div class="nav-group" data-group="ID-UNICO"> completo y cambia el título.
+      Las categorías se pliegan/despliegan con clic y la página recuerda cómo las dejaste.
+    -->
 
-    <ul class="nav-links" id="navLinks">
-      <li><button class="nav-btn active" data-section="mensajes" onclick="mostrarSeccion('mensajes')">
-        <span class="nav-icon">💬</span> Mensajes de Soporte
-      </button></li>
-      <li><button class="nav-btn" data-section="agendamientos" onclick="mostrarSeccion('agendamientos')">
-        <span class="nav-icon">📅</span> Agendamientos y Enlaces
-      </button></li>
-      <li><button class="nav-btn" data-section="dividir" onclick="mostrarSeccion('dividir')">
-        <span class="nav-icon">📊</span> Dividir Archivos
-      </button></li>
-      <li><button class="nav-btn" data-section="MensajesReuniones" onclick="window.open('https://claude.ai/artifact/1ZrbDkxBcjob4BpBVFaPLs?sk=jBeNdRZwN-CEiclg2gE_uw', '_blank')">
-      <span class"nav-icon">👤</span> Mensajes Reuniones
-      </button></li>
-      <li><button class="nav-btn" data-section="Informe_reuniones" onclick="window.open('https://claude.ai/artifact/6VsAXFSKBhfXoygsjov11i', '_blank')">
-      <span class"nav-icon">📊</span> Informe Reuniones
-      </button></li>
-      <!--
-        PARA AGREGAR UNA NUEVA SECCIÓN EN EL FUTURO:
-        1. Copia una <li> de esta lista y cambia data-section, el ícono y el texto.
-        2. Crea el bloque <section class="tool-section" id="seccion-NOMBRE"> más abajo.
-        3. Si necesitas lógica propia, agrégala en script.js.
-        No se requiere tocar el resto del menú ni de las otras secciones.
-      -->
+    <!-- Categoría: Atención al cliente -->
+    <div class="nav-group" data-group="atencion">
+      <button class="nav-group-title" onclick="toggleGrupo(this)" aria-expanded="true">
+        <span>Atención al cliente</span><span class="chev">▾</span>
+      </button>
+      <ul class="nav-list">
+        <li><button class="nav-btn active" data-section="mensajes" onclick="mostrarSeccion('mensajes')">
+          <span class="nav-icon">💬</span><span class="nav-text">Mensajes de Soporte</span>
+        </button></li>
+        <li><button class="nav-btn" data-section="agendamientos" onclick="mostrarSeccion('agendamientos')">
+          <span class="nav-icon">📅</span><span class="nav-text">Agendamientos y Enlaces</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- Categoría: Reuniones -->
+    <div class="nav-group" data-group="reuniones">
+      <button class="nav-group-title" onclick="toggleGrupo(this)" aria-expanded="true">
+        <span>Reuniones</span><span class="chev">▾</span>
+      </button>
+      <ul class="nav-list">
+        <li><button class="nav-btn nav-external" onclick="abrirEnlace('https://claude.ai/artifact/1ZrbDkxBcjob4BpBVFaPLs?sk=jBeNdRZwN-CEiclg2gE_uw')">
+          <span class="nav-icon">👤</span><span class="nav-text">Mensajes Reuniones</span><span class="ext">↗</span>
+        </button></li>
+        <li><button class="nav-btn nav-external" onclick="abrirEnlace('https://claude.ai/artifact/6VsAXFSKBhfXoygsjov11i')">
+          <span class="nav-icon">📊</span><span class="nav-text">Informe Reuniones</span><span class="ext">↗</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <!-- Categoría: Archivos -->
+    <div class="nav-group" data-group="archivos">
+      <button class="nav-group-title" onclick="toggleGrupo(this)" aria-expanded="true">
+        <span>Archivos</span><span class="chev">▾</span>
+      </button>
+      <ul class="nav-list">
+        <li><button class="nav-btn" data-section="dividir" onclick="mostrarSeccion('dividir')">
+          <span class="nav-icon">✂️</span><span class="nav-text">Dividir Archivos</span>
+        </button></li>
+      </ul>
+    </div>
+
+    <ul class="nav-list nav-list-footer">
       <li><button class="nav-btn nav-btn-placeholder" disabled title="Reservado para una futura herramienta">
-        <span class="nav-icon">➕</span> Próximamente
+        <span class="nav-icon">➕</span><span class="nav-text">Próximamente</span>
       </button></li>
     </ul>
-  </div>
-</nav>
+  </nav>
+</aside>
 
 <main class="page">
 

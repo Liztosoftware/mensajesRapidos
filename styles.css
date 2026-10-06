@@ -189,6 +189,70 @@ body {
   display: none;
 }
 
+/* Categorías del menú */
+.nav-group { margin-bottom: 14px; }
+
+.nav-group-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 6px 8px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.nav-group-title:hover { color: var(--text); }
+.nav-group-title .chev { display: inline-block; transition: transform 0.2s; font-size: 12px; }
+.nav-group.collapsed .chev { transform: rotate(-90deg); }
+.nav-group.collapsed .nav-list { display: none; }
+
+.nav-list { gap: 4px; }
+.nav-list-footer { margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+.nav-btn .nav-text { flex: 1; }
+.nav-btn .ext { font-size: 12px; opacity: 0.6; }
+
+.nav-btn:focus-visible,
+.nav-group-title:focus-visible,
+.sidebar-close:focus-visible,
+.hamburger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sidebar-close {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.sidebar-close:hover { color: var(--text); }
+
+/* Barra superior solo en celular */
+.mobile-topbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(15, 18, 22, 0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
 /* =======================================================
    LAYOUT / PAGE
    ======================================================= */
@@ -521,6 +585,8 @@ input:focus {
   }
 
   .hamburger { display: flex; }
+  .mobile-topbar { display: flex; }
+  .sidebar-close { display: block; }
 
   .page {
     margin-left: 0;

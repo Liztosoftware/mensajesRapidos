@@ -4,18 +4,23 @@
    ======================================================= */
 
 /* -------------------------------------------------------
-   NAVEGACIÓN ENTRE SECCIONES
+   NAVEGACIÓN — MENÚ LATERAL
    ------------------------------------------------------- */
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const hamburger = document.getElementById('hamburger');
+const sidebarClose = document.getElementById('sidebarClose');
 
 function isMobileView() {
   return window.innerWidth <= 860;
 }
 
+function openSidebar() {
+  sidebar.classList.add('open');
+  sidebarOverlay.classList.add('visible');
+}
+
 function closeSidebar() {
-  if (!isMobileView()) return;
   sidebar.classList.remove('open');
   sidebarOverlay.classList.remove('visible');
 }
@@ -29,25 +34,53 @@ function mostrarSeccion(id) {
     btn.classList.toggle('active', btn.dataset.section === id);
   });
 
-  closeSidebar();
+  try { localStorage.setItem('lizto_seccion', id); } catch (e) {}
+  if (isMobileView()) closeSidebar();
 }
 
-if (hamburger) {
-  hamburger.addEventListener('click', () => {
-    const isOpen = sidebar.classList.toggle('open');
-    sidebarOverlay.classList.toggle('visible', isOpen);
+function abrirEnlace(url) {
+  window.open(url, '_blank');
+  if (isMobileView()) closeSidebar();
+}
+
+/* Categorías plegables (recuerda cuáles dejaste cerradas) */
+function leerGruposCerrados() {
+  try { return JSON.parse(localStorage.getItem('lizto_grupos_cerrados')) || []; }
+  catch (e) { return []; }
+}
+
+function toggleGrupo(titleBtn) {
+  const grupo = titleBtn.closest('.nav-group');
+  const cerrado = grupo.classList.toggle('collapsed');
+  titleBtn.setAttribute('aria-expanded', String(!cerrado));
+
+  let cerrados = leerGruposCerrados().filter(g => g !== grupo.dataset.group);
+  if (cerrado) cerrados.push(grupo.dataset.group);
+  try { localStorage.setItem('lizto_grupos_cerrados', JSON.stringify(cerrados)); } catch (e) {}
+}
+
+function restaurarMenu() {
+  const cerrados = leerGruposCerrados();
+  document.querySelectorAll('.nav-group').forEach(grupo => {
+    if (cerrados.includes(grupo.dataset.group)) {
+      grupo.classList.add('collapsed');
+      const t = grupo.querySelector('.nav-group-title');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    }
   });
+
+  let ultima = null;
+  try { ultima = localStorage.getItem('lizto_seccion'); } catch (e) {}
+  if (ultima && document.getElementById('seccion-' + ultima)) mostrarSeccion(ultima);
 }
 
-if (sidebarOverlay) {
-  sidebarOverlay.addEventListener('click', () => closeSidebar());
-}
+if (hamburger) hamburger.addEventListener('click', openSidebar);
+if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
 
 window.addEventListener('resize', () => {
-  if (!isMobileView()) {
-    sidebar.classList.remove('open');
-    sidebarOverlay.classList.remove('visible');
-  }
+  if (!isMobileView()) closeSidebar();
 });
 
 /* -------------------------------------------------------
@@ -389,6 +422,7 @@ if (downloadAllBtn) {
    ESTADO INICIAL
    ------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
+  restaurarMenu();
   if (document.getElementById('btnYeison') && document.getElementById('btnPaola')) {
     seleccionarAgente('yeison');
   }
