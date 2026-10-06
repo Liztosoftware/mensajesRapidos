@@ -9,15 +9,10 @@
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const hamburger = document.getElementById('hamburger');
-const sidebarClose = document.getElementById('sidebarClose');
+const moduloActual = document.getElementById('moduloActual');
 
 function isMobileView() {
   return window.innerWidth <= 860;
-}
-
-function openSidebar() {
-  sidebar.classList.add('open');
-  sidebarOverlay.classList.add('visible');
 }
 
 function closeSidebar() {
@@ -25,13 +20,16 @@ function closeSidebar() {
   sidebarOverlay.classList.remove('visible');
 }
 
+/* Muestra el módulo a la derecha y marca el ítem activo */
 function mostrarSeccion(id) {
   document.querySelectorAll('.tool-section').forEach(sec => sec.classList.remove('active'));
   const targetSection = document.getElementById('seccion-' + id);
   if (targetSection) targetSection.classList.add('active');
 
   document.querySelectorAll('.nav-btn[data-section]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.section === id);
+    const activo = btn.dataset.section === id;
+    btn.classList.toggle('active', activo);
+    if (activo && moduloActual) moduloActual.textContent = btn.querySelector('.nav-text').textContent;
   });
 
   try { localStorage.setItem('lizto_seccion', id); } catch (e) {}
@@ -43,45 +41,38 @@ function abrirEnlace(url) {
   if (isMobileView()) closeSidebar();
 }
 
-/* Categorías plegables (recuerda cuáles dejaste cerradas) */
-function leerGruposCerrados() {
-  try { return JSON.parse(localStorage.getItem('lizto_grupos_cerrados')) || []; }
-  catch (e) { return []; }
+/* Ítems con flecha: abren/cierran su submenú */
+function toggleSubmenu(btn) {
+  const parent = btn.closest('.nav-parent');
+  const abierto = parent.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(abierto));
 }
 
-function toggleGrupo(titleBtn) {
-  const grupo = titleBtn.closest('.nav-group');
-  const cerrado = grupo.classList.toggle('collapsed');
-  titleBtn.setAttribute('aria-expanded', String(!cerrado));
-
-  let cerrados = leerGruposCerrados().filter(g => g !== grupo.dataset.group);
-  if (cerrado) cerrados.push(grupo.dataset.group);
-  try { localStorage.setItem('lizto_grupos_cerrados', JSON.stringify(cerrados)); } catch (e) {}
-}
-
-function restaurarMenu() {
-  const cerrados = leerGruposCerrados();
-  document.querySelectorAll('.nav-group').forEach(grupo => {
-    if (cerrados.includes(grupo.dataset.group)) {
-      grupo.classList.add('collapsed');
-      const t = grupo.querySelector('.nav-group-title');
-      if (t) t.setAttribute('aria-expanded', 'false');
+/* Botón ☰: en computador oculta/muestra el menú; en celular lo abre como panel */
+if (hamburger) {
+  hamburger.addEventListener('click', () => {
+    if (isMobileView()) {
+      const abierto = sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('visible', abierto);
+    } else {
+      document.body.classList.toggle('sidebar-hidden');
     }
   });
-
-  let ultima = null;
-  try { ultima = localStorage.getItem('lizto_seccion'); } catch (e) {}
-  if (ultima && document.getElementById('seccion-' + ultima)) mostrarSeccion(ultima);
 }
-
-if (hamburger) hamburger.addEventListener('click', openSidebar);
-if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
+window.addEventListener('resize', () => { if (!isMobileView()) closeSidebar(); });
 
-window.addEventListener('resize', () => {
-  if (!isMobileView()) closeSidebar();
-});
+function restaurarMenu() {
+  const hoy = new Date();
+  const fechaEl = document.getElementById('fechaHoy');
+  if (fechaEl) {
+    fechaEl.textContent = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+  }
+  let ultima = null;
+  try { ultima = localStorage.getItem('lizto_seccion'); } catch (e) {}
+  mostrarSeccion(ultima && document.getElementById('seccion-' + ultima) ? ultima : 'mensajes');
+}
 
 /* -------------------------------------------------------
    NOTIFICACIÓN DE COPIADO (compartida por todas las secciones)

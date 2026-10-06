@@ -6,7 +6,7 @@
 <title>Herramientas Líder de Soporte · Lizto Software</title>
 <link rel="icon" type="image/png" href="https://i.ibb.co/M5QnCZR1/images.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -15,88 +15,75 @@
 
 <div id="copy-notification">Copiado ✅</div>
 
-<!-- ============ BARRA SUPERIOR (solo celular) ============ -->
-<header class="mobile-topbar">
-  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
-    <span></span><span></span><span></span>
+<!-- ============ BARRA SUPERIOR ============ -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <span class="brand-mark">L</span>
+    <span class="brand-title">Herramientas</span>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Mostrar u ocultar menú">
+    <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
   </button>
-  <span class="brand-title">Herramientas Lizto</span>
+  <span class="topbar-title" id="moduloActual">Mensajes de Soporte</span>
+  <div class="topbar-right">
+    <span class="topbar-user">Líder de Soporte</span>
+    <span class="topbar-date" id="fechaHoy"></span>
+  </div>
 </header>
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- ============ MENÚ LATERAL ============ -->
+<!--
+  CÓMO AGREGAR UN MÓDULO NUEVO:
+  1. Copia un <li> de módulo interno, cambia data-section, el ícono (svg) y el texto.
+  2. Crea abajo el bloque <section class="tool-section" id="seccion-NOMBRE">.
+  - Para un enlace externo usa onclick="abrirEnlace('URL')" en vez de mostrarSeccion.
+  - Para agrupar varios módulos bajo un mismo ítem con flecha, copia el bloque "nav-parent" de Reuniones.
+-->
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-brand">
-      <span class="brand-mark">L</span>
-      <div class="brand-text">
-        <span class="brand-title">Herramientas</span>
-        <span class="brand-subtitle">Líder de Soporte · Lizto Software</span>
-      </div>
-    </div>
-    <button class="sidebar-close" id="sidebarClose" aria-label="Cerrar menú">✕</button>
-  </div>
+  <ul class="nav-list">
 
-  <nav class="sidebar-nav">
-    <!--
-      CÓMO AGREGAR UNA HERRAMIENTA NUEVA:
-      - Interna (vive en esta página): copia un <li> con onclick="mostrarSeccion('NOMBRE')" y data-section="NOMBRE",
-        y crea abajo el bloque <section class="tool-section" id="seccion-NOMBRE">.
-      - Externa (otro enlace): copia un <li> con onclick="abrirEnlace('URL')" y la clase nav-external.
-      CÓMO AGREGAR UNA CATEGORÍA NUEVA:
-      - Copia un bloque <div class="nav-group" data-group="ID-UNICO"> completo y cambia el título.
-      Las categorías se pliegan/despliegan con clic y la página recuerda cómo las dejaste.
-    -->
+    <li><button class="nav-btn active" data-section="mensajes" onclick="mostrarSeccion('mensajes')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="nav-text">Mensajes de Soporte</span>
+    </button></li>
 
-    <!-- Categoría: Atención al cliente -->
-    <div class="nav-group" data-group="atencion">
-      <button class="nav-group-title" onclick="toggleGrupo(this)" aria-expanded="true">
-        <span>Atención al cliente</span><span class="chev">▾</span>
+    <li><button class="nav-btn" data-section="agendamientos" onclick="mostrarSeccion('agendamientos')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+      <span class="nav-text">Agendamientos y Enlaces</span>
+    </button></li>
+
+    <li><button class="nav-btn" data-section="dividir" onclick="mostrarSeccion('dividir')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>
+      <span class="nav-text">Dividir Archivos</span>
+    </button></li>
+
+    <!-- Ítem con submenú -->
+    <li class="nav-parent">
+      <button class="nav-btn" onclick="toggleSubmenu(this)" aria-expanded="false">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <span class="nav-text">Reuniones</span>
+        <svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
       </button>
-      <ul class="nav-list">
-        <li><button class="nav-btn active" data-section="mensajes" onclick="mostrarSeccion('mensajes')">
-          <span class="nav-icon">💬</span><span class="nav-text">Mensajes de Soporte</span>
+      <ul class="submenu">
+        <li><button class="nav-btn nav-sub" onclick="abrirEnlace('https://claude.ai/artifact/1ZrbDkxBcjob4BpBVFaPLs?sk=jBeNdRZwN-CEiclg2gE_uw')">
+          <span class="nav-text">Mensajes Reuniones</span>
+          <svg class="ext" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
         </button></li>
-        <li><button class="nav-btn" data-section="agendamientos" onclick="mostrarSeccion('agendamientos')">
-          <span class="nav-icon">📅</span><span class="nav-text">Agendamientos y Enlaces</span>
+        <li><button class="nav-btn nav-sub" onclick="abrirEnlace('https://claude.ai/artifact/6VsAXFSKBhfXoygsjov11i')">
+          <span class="nav-text">Informe Reuniones</span>
+          <svg class="ext" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
         </button></li>
       </ul>
-    </div>
+    </li>
 
-    <!-- Categoría: Reuniones -->
-    <div class="nav-group" data-group="reuniones">
-      <button class="nav-group-title" onclick="toggleGrupo(this)" aria-expanded="true">
-        <span>Reuniones</span><span class="chev">▾</span>
-      </button>
-      <ul class="nav-list">
-        <li><button class="nav-btn nav-external" onclick="abrirEnlace('https://claude.ai/artifact/1ZrbDkxBcjob4BpBVFaPLs?sk=jBeNdRZwN-CEiclg2gE_uw')">
-          <span class="nav-icon">👤</span><span class="nav-text">Mensajes Reuniones</span><span class="ext">↗</span>
-        </button></li>
-        <li><button class="nav-btn nav-external" onclick="abrirEnlace('https://claude.ai/artifact/6VsAXFSKBhfXoygsjov11i')">
-          <span class="nav-icon">📊</span><span class="nav-text">Informe Reuniones</span><span class="ext">↗</span>
-        </button></li>
-      </ul>
-    </div>
+    <li><button class="nav-btn nav-btn-placeholder" disabled title="Reservado para una futura herramienta">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      <span class="nav-text">Próximamente</span>
+    </button></li>
 
-    <!-- Categoría: Archivos -->
-    <div class="nav-group" data-group="archivos">
-      <button class="nav-group-title" onclick="toggleGrupo(this)" aria-expanded="true">
-        <span>Archivos</span><span class="chev">▾</span>
-      </button>
-      <ul class="nav-list">
-        <li><button class="nav-btn" data-section="dividir" onclick="mostrarSeccion('dividir')">
-          <span class="nav-icon">✂️</span><span class="nav-text">Dividir Archivos</span>
-        </button></li>
-      </ul>
-    </div>
-
-    <ul class="nav-list nav-list-footer">
-      <li><button class="nav-btn nav-btn-placeholder" disabled title="Reservado para una futura herramienta">
-        <span class="nav-icon">➕</span><span class="nav-text">Próximamente</span>
-      </button></li>
-    </ul>
-  </nav>
+  </ul>
 </aside>
 
 <main class="page">
