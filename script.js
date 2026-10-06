@@ -6,20 +6,48 @@
 /* -------------------------------------------------------
    NAVEGACIÓN ENTRE SECCIONES
    ------------------------------------------------------- */
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const hamburger = document.getElementById('hamburger');
+
+function isMobileView() {
+  return window.innerWidth <= 860;
+}
+
+function closeSidebar() {
+  if (!isMobileView()) return;
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('visible');
+}
+
 function mostrarSeccion(id) {
   document.querySelectorAll('.tool-section').forEach(sec => sec.classList.remove('active'));
-  document.getElementById('seccion-' + id).classList.add('active');
+  const targetSection = document.getElementById('seccion-' + id);
+  if (targetSection) targetSection.classList.add('active');
 
   document.querySelectorAll('.nav-btn[data-section]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.section === id);
   });
 
-  // Cierra el menú móvil al elegir una sección
-  document.getElementById('navLinks').classList.remove('open');
+  closeSidebar();
 }
 
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('navLinks').classList.toggle('open');
+if (hamburger) {
+  hamburger.addEventListener('click', () => {
+    const isOpen = sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('visible', isOpen);
+  });
+}
+
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener('click', () => closeSidebar());
+}
+
+window.addEventListener('resize', () => {
+  if (!isMobileView()) {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('visible');
+  }
 });
 
 /* -------------------------------------------------------
@@ -48,15 +76,15 @@ const mensajes = {
   afternoonMessage: "buenas tardes, ¿cómo estás? Hablas con Yeison Hernandez del equipo de soporte de Lizto Software. ",
   pagoRealizadoMessage: "¿Cómo estás? Hablas con Yeison Hernandez del equipo de soporte de Lizto. Mil gracias por el pago. Ya puedes ingresar.",
   pagoGraciasMessage: "con mucho gusto, indícame el NIT del salón para solicitarlo al área contable.",
-  solicitarLinkMessage: "¿Cómo estás? Hablas con Yeison Hernandez del equipo de soporte de Lizto. Mil disculpas, el sistema entró en suspensión automática al no detectar el pago. ¿Me puedes enviar el soporte de pago y el NIT para verificarlo con contabilidad?",
-  despedidaMessage: "ha sido un gusto ayudarte. Si necesitas más ayuda, no dudes en contactarnos. ¡Te deseo un excelente día! Te dejamos una encuesta de satisfacción para que puedas calificar nuestra atención: short.lizto.co/pkFN2dEfvu",
+  solicitarLinkMessage: "¿Cómo estás? Hablas con Yeison Hernandez del equipo de soporte de Lizto. Mil disculpas, el sistema entró en suspensión automática al no detectar el pago. ¿Me puedes indicar por favor el número de factura?",
+  despedidaMessage: "ha sido un gusto ayudarte. Si necesitas más ayuda, no dudes en contactarnos. ¡Te deseo un excelente día! Te dejamos una encuesta de satisfacción para que puedas calificar nuestro servicio.",
   linkReunionMessage: "Al correo te acabamos de enviar el link de la reunión. ¿Me confirmas por favor si te llegó?",
-  sinRespuesta: "Esperamos que la solución brindada haya resuelto tu caso. Cuando tengas un momento, ¿podrías confirmarnos si todo está en orden? Al no tener respuesta, procederemos a cerrar el ticket, pero si tienes otra consulta estaremos atentos para ayudarte.",
+  sinRespuesta: "Esperamos que la solución brindada haya resuelto tu caso. Cuando tengas un momento, ¿podrías confirmarnos si todo está en orden? Al no tener respuesta, procederemos a cerrar el caso.",
   linkPago: "puedes realizar el pago en este link:",
-  reunionDudas: "Horarios martes y jueves  9am en clase grupal https://us06web.zoom.us/j/83345602567 martes y jueves  5pm https://us06web.zoom.us/j/83272928783?pwd=5oyn4FfSuZ7F5gPDakoUUqVqhTmKbT.1 ",
+  reunionDudas: "Horarios martes y jueves 9am en clase grupal https://us06web.zoom.us/j/83345602567 martes y jueves 5pm https://us06web.zoom.us/j/83272928783?pwd=5oyn4FfSuZ7F5gPDakoUUqVqhTmKbT.1",
   dameunMomento: "dame un momento por favor, vamos a verificar.",
   algoMas: "con mucho gusto, ¿hay algo más en lo que te podamos colaborar?",
-   seSoluciono: "Me confirmas por favor: ¿la solución que te brindamos resolvió lo que necesitabas? Si todo quedó bien, o si algo sigue pendiente, cuéntanos para seguir ayudándote. 🙌?"
+  seSoluciono: "Me confirmas por favor: ¿la solución que te brindamos resolvió lo que necesitabas? Si todo quedó bien, o si algo sigue pendiente, cuéntanos para seguir ayudándote. 🙌?"
 };
 
 let mensajeActual = "";
@@ -128,7 +156,7 @@ function actualizarMensajeActual() {
    SECCIÓN 2: AGENDAMIENTOS Y ENLACES
    ========================================================= */
 const horarios = {
-  yeison: { '9am': 'https://us06web.zoom.us/j/86553506923', '11am': 'https://us06web.zoom.us/j/84015173788', '3pm': 'https://us06web.zoom.us/j/86502199583', '5pm': 'https://us06web.zoom.us/j/89901352812' },
+  yeison: { '9am': 'https://us06web.zoom.us/j/86553506923', '11am': 'https://us06web.zoom.us/j/84015173788', '3pm': 'https://us06web.zoom.us/j/86502199583', '5pm': 'https://us06web.zoom.us/j/8990' },
   paola: { '9am': 'https://us06web.zoom.us/j/84560427915', '1pm': 'https://us06web.zoom.us/j/87186962523', '4pm': 'https://us06web.zoom.us/j/81938853734' }
 };
 
@@ -218,20 +246,25 @@ const resultados = document.getElementById('resultados');
 const resultList = document.getElementById('resultList');
 const downloadAllBtn = document.getElementById('downloadAllBtn');
 
-dropZone.addEventListener('click', () => fileInput.click());
-dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-dropZone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  dropZone.classList.remove('dragover');
-  if (e.dataTransfer.files.length) {
-    fileInput.files = e.dataTransfer.files;
-    handleFile(e.dataTransfer.files[0]);
-  }
-});
-fileInput.addEventListener('change', () => {
-  if (fileInput.files.length) handleFile(fileInput.files[0]);
-});
+if (dropZone) {
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) {
+      fileInput.files = e.dataTransfer.files;
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+}
+
+if (fileInput) {
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) handleFile(fileInput.files[0]);
+  });
+}
 
 function showError(msg) {
   errorMsg.textContent = msg;
@@ -277,80 +310,86 @@ function handleFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
-processBtn.addEventListener('click', () => {
-  clearError();
-  if (!originalRows) {
-    showError('Primero sube un archivo Excel válido.');
-    return;
-  }
-  const chunkSize = parseInt(chunkSizeInput.value, 10);
-  if (!chunkSize || chunkSize < 1) {
-    showError('Ingresa una cantidad válida de registros por archivo.');
-    return;
-  }
+if (processBtn) {
+  processBtn.addEventListener('click', () => {
+    clearError();
+    if (!originalRows) {
+      showError('Primero sube un archivo Excel válido.');
+      return;
+    }
+    const chunkSize = parseInt(chunkSizeInput.value, 10);
+    if (!chunkSize || chunkSize < 1) {
+      showError('Ingresa una cantidad válida de registros por archivo.');
+      return;
+    }
 
-  const header = originalRows[0];
-  const dataRows = originalRows.slice(1);
-  const totalRegistros = dataRows.length;
+    const header = originalRows[0];
+    const dataRows = originalRows.slice(1);
+    const totalRegistros = dataRows.length;
 
-  generatedFiles = [];
-  resultList.innerHTML = '';
+    generatedFiles = [];
+    resultList.innerHTML = '';
 
-  const numArchivos = Math.ceil(totalRegistros / chunkSize);
+    const numArchivos = Math.ceil(totalRegistros / chunkSize);
 
-  for (let i = 0; i < numArchivos; i++) {
-    const start = i * chunkSize;
-    const end = Math.min(start + chunkSize, totalRegistros);
-    const chunk = dataRows.slice(start, end);
-    const aoa = [header, ...chunk];
+    for (let i = 0; i < numArchivos; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, totalRegistros);
+      const chunk = dataRows.slice(start, end);
+      const aoa = [header, ...chunk];
 
-    const ws = XLSX.utils.aoa_to_sheet(aoa);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([wbout], { type: 'application/octet-stream' });
+      const ws = XLSX.utils.aoa_to_sheet(aoa);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/octet-stream' });
 
-    const fileName = `${originalFileBase}_parte${i + 1}.xlsx`;
-    generatedFiles.push({ name: fileName, blob: blob, count: chunk.length });
-  }
+      const fileName = `${originalFileBase}_parte${i + 1}.xlsx`;
+      generatedFiles.push({ name: fileName, blob: blob, count: chunk.length });
+    }
 
-  summary.textContent = `Se generaron ${numArchivos} archivo(s) a partir de ${totalRegistros} registros (${chunkSize} por archivo, el último puede tener menos).`;
-  summary.classList.add('visible');
+    summary.textContent = `Se generaron ${numArchivos} archivo(s) a partir de ${totalRegistros} registros (${chunkSize} por archivo, el último puede tener menos).`;
+    summary.classList.add('visible');
 
-  generatedFiles.forEach(f => {
-    const url = URL.createObjectURL(f.blob);
-    const item = document.createElement('div');
-    item.className = 'result-item';
-    item.innerHTML = `
-      <div class="info">
-        <div>${f.name}</div>
-        <div class="rows">${f.count} registros + encabezado</div>
-      </div>
-      <a href="${url}" download="${f.name}">Descargar</a>
-    `;
-    resultList.appendChild(item);
+    generatedFiles.forEach(f => {
+      const url = URL.createObjectURL(f.blob);
+      const item = document.createElement('div');
+      item.className = 'result-item';
+      item.innerHTML = `
+        <div class="info">
+          <div>${f.name}</div>
+          <div class="rows">${f.count} registros + encabezado</div>
+        </div>
+        <a href="${url}" download="${f.name}">Descargar</a>
+      `;
+      resultList.appendChild(item);
+    });
+
+    resultados.classList.add('visible');
   });
+}
 
-  resultados.classList.add('visible');
-});
-
-downloadAllBtn.addEventListener('click', async () => {
-  if (!generatedFiles.length) return;
-  const zip = new JSZip();
-  generatedFiles.forEach(f => zip.file(f.name, f.blob));
-  const content = await zip.generateAsync({ type: 'blob' });
-  const url = URL.createObjectURL(content);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${originalFileBase}_dividido.zip`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-});
+if (downloadAllBtn) {
+  downloadAllBtn.addEventListener('click', async () => {
+    if (!generatedFiles.length) return;
+    const zip = new JSZip();
+    generatedFiles.forEach(f => zip.file(f.name, f.blob));
+    const content = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${originalFileBase}_dividido.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+}
 
 /* -------------------------------------------------------
    ESTADO INICIAL
    ------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-  seleccionarAgente('yeison');
+  if (document.getElementById('btnYeison') && document.getElementById('btnPaola')) {
+    seleccionarAgente('yeison');
+  }
 });
